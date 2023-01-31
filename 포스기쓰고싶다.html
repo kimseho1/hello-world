@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계산기</title>
+    <style>
+        * { box-sizing: border-box }
+        #result { width: 180px; height: 50px; margin: 5px; text-align: right }
+        #clear {width: 70px; height: 50px; margin: 5px;}
+        li{list-style-type: none;}
+        .cookButton { width: 70px; height: 70px; margin: 5px; position: relative; left :300px;}
+        .cookcount{width: 70px; height: 50px; margin: 5px; }
+        .cook {width: 180px; height: 50px; margin: 5px; text-align: right;}
+        .scroller section { display: inline-block; scroll-snap-align: start; }
+        .scroller {
+            height: 300px;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            position: absolute;
+        }
+        .menuspan{
+            font-size: 8px;
+        }
+
+      </style>
+</head>
+<body>
+    <article class="scroller" id="art">
+        <section id="sec1">
+            <li><input readonly type="text" class="cook"></li>
+        </section>
+        <section id="sec2">
+            <li><input readonly type="text" class="cookcount"></li>
+        </section>
+    </article>
+
+    <div class="row">
+        <button class="cookButton" id="num-0">짜장면<br><span class="menuspan">5000</span></button>
+        <button class="cookButton" id="num-1">우  동<br><span class="menuspan">5000</span></button>
+        <button class="cookButton" id="num-2">짬  뽕<br><span class="menuspan">6000</span></button>
+        <button class="cookButton" id="num-3">간짜장<br><span class="menuspan">6000</span></button>
+    </div>
+    <div class="row"> 
+        <button class="cookButton" id="num-4">삼선짜장<br><span class="menuspan">8000</span></button>
+        <button class="cookButton" id="num-5">울  면<br><span class="menuspan">6000</span></button>
+        <button class="cookButton" id="num-6">짬뽕밥<br><span class="menuspan">6500</span></button>
+        <button class="cookButton" id="num-7">짜장밥<br><span class="menuspan">6500</span></button>
+    </div>
+    <div class="row">
+        <button class="cookButton" id="num-8">볶음밥<br><span class="menuspan">6500</span></button>
+        <button class="cookButton" id="num-9">잡채밥<br><span class="menuspan">6500</span></button>
+        <button class="cookButton" id="num-10">탕수육<br><span class="menuspan">17000</span></button>
+        <button class="cookButton" id="num-11">라조육<br><span class="menuspan">20000</span></button>
+    </div>
+    <div class="row">
+        <button class="cookButton" id="num-12">군만두<br><span class="menuspan">7000</span></button>
+        <button class="cookButton" id="num-13">소  주<br><span class="menuspan">4000</span></button>
+        <button class="cookButton" id="num-14">맥  주<br><span class="menuspan">4500</span></button>
+        <button class="cookButton" id="num-15">음  료<br><span class="menuspan">1500</span></button>
+    </div>
+    <input readonly type="number" id="result">
+    <button id="clear">초기화</button>
+
+    <script>
+        var arrValues = new Array();
+
+        let cookValue = 0; 
+        let Countval = 0;
+        const $result = document.querySelector('#result');
+
+        const OnClickNumber = (number,cook,count) => () => {
+            cookValue += number;
+            $result.value = cookValue;
+
+            const menuElements = document.querySelectorAll('.cook');
+            const menuCount = document.querySelectorAll('.cookcount');
+            const $art = document.getElementById('art');
+
+            const $sec1 = document.getElementById("sec1");
+            const $li1 = document.createElement('li');
+            const $input1 = document.createElement("input");
+            const $sec2 = document.getElementById("sec2");
+            const $li2 = document.createElement('li');
+            const $input2 = document.createElement("input");
+
+            for (let index = 0; index <= arrValues.length; index += 1) {
+
+                if (menuElements[index].value == '')
+                {   
+                    $li1.appendChild($input1);
+                    $sec1.append($li1);
+                    $art.append($sec1);
+
+                    $li1.setAttribute('id','li1' + index);
+
+                    $input1.setAttribute("type", "text");
+                    $input1.className = 'cook';
+                    $input1.readOnly = true; 
+                    
+                    $li2.setAttribute('id','li2' + index);
+
+                    $li2.appendChild($input2);
+                    $sec2.append($li2);
+                    $art.append($sec2);
+
+                    
+                    $input2.setAttribute("type", "text");
+                    $input2.className = 'cookcount';
+                    $input2.readOnly = true; 
+
+                    menuCount[index].value = count;
+                    menuElements[index].value = cook;
+                    arrValues.push(cook);
+
+                    menuElements[index].focus();
+
+                    break
+                }else if (menuElements[index].value == cook){
+                    Countval = parseInt(menuCount[index].value) + count;
+                    menuCount[index].value = Countval;
+                    menuElements[index].focus();
+                    break
+                }
+                
+                    
+            }
+            
+            
+            
+        };//onclick
+        
+        document.querySelector('#num-0').addEventListener('click', OnClickNumber(5000,'짜장면',1));
+        document.querySelector('#num-1').addEventListener('click', OnClickNumber(5000,'우  동',1));
+        document.querySelector('#num-2').addEventListener('click', OnClickNumber(6000,'짬  뽕',1));
+        document.querySelector('#num-3').addEventListener('click', OnClickNumber(6000,'간짜장',1));
+        document.querySelector('#num-4').addEventListener('click', OnClickNumber(8000,'삼선짜장',1));
+        document.querySelector('#num-5').addEventListener('click', OnClickNumber(6000,'울  면',1));
+        document.querySelector('#num-6').addEventListener('click', OnClickNumber(6500,'짬뽕밥',1));
+        document.querySelector('#num-7').addEventListener('click', OnClickNumber(6500,'짜장밥',1));
+        document.querySelector('#num-8').addEventListener('click', OnClickNumber(6500,'볶음밥',1));
+        document.querySelector('#num-9').addEventListener('click', OnClickNumber(6500,'잡채밥',1));
+        document.querySelector('#num-10').addEventListener('click', OnClickNumber(17000,'탕수육',1));
+        document.querySelector('#num-11').addEventListener('click', OnClickNumber(20000,'라조육',1));
+        document.querySelector('#num-12').addEventListener('click', OnClickNumber(7000,'군만두',1));
+        document.querySelector('#num-13').addEventListener('click', OnClickNumber(4000,'소  주',1));
+        document.querySelector('#num-14').addEventListener('click', OnClickNumber(4500,'맥  주',1));
+        document.querySelector('#num-15').addEventListener('click', OnClickNumber(1500,'음  료',1));
+
+        document.querySelector('#clear').addEventListener('click',() =>{
+        number = 0;
+        cookValue = 0;
+        Countval = 0;
+        $result.value = '';
+        
+
+        const menuElements = document.querySelectorAll('.cook');
+        const menuCount = document.querySelectorAll('.cookcount');
+
+        for (let index = 0; index < menuElements.length-1; index += 1) {
+                
+                menuElements[index].value = ''
+                menuCount[index].value = ''
+                arrValues[index] = '';
+            
+                document.getElementById('li1' + index).remove();
+                document.getElementById('li2' + index).remove();
+            }
+
+            menuElements[0].focus()
+        })
+        
+    </script>
+
+</body>
+</html>
